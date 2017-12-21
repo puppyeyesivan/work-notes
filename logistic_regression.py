@@ -1,6 +1,6 @@
 #load in data
 import graphlab
-products=graplab.SFrames('/Volumes/Seagate Expansion Drive/learning topic/machine learning/classification and logistic regression/week 2/data/amazon_baby_subset.gl/')
+products=graplab.SFrames('/Volumes/Seagate Expansion Drive/learning topic/machine learning/classification and logistic regression/data/amazon_baby_subset.gl/')
 
 #show up the number of postive/negative reviews
 print 'number of positive reviews=',len(products[products['sentiment']==1])
