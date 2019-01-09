@@ -1,53 +1,15 @@
 Python 2.7.15 |Anaconda, Inc.| (default, May  1 2018, 18:37:05) 
 [GCC 4.2.1 Compatible Clang 4.0.1 (tags/RELEASE_401/final)] on darwin
 Type "copyright", "credits" or "license()" for more information.
+
 >>> #import modules
 >>> from __future__ import division
 >>> import graphlab
 >>> import math
 >>> import string
+
 >>> #step1: import data
->>> products=graphlab.SFrame('/Users/yifanyu/Documents/Topic Learning/ML Classification/amazon_baby.gl/')
-This non-commercial license of GraphLab Create for academic use is assigned to yifan1991@gwmail.gwu.edu and will expire on December 19, 2019.
-[INFO] graphlab.cython.cy_server: GraphLab Create v2.1 started. Logging: /tmp/graphlab_server_1547071126.log
-
-Traceback (most recent call last):
-  File "<pyshell#6>", line 1, in <module>
-    products=graphlab.SFrame('/Users/yifanyu/Documents/Topic Learning/ML Classification/amazon_baby.gl/')
-  File "/Users/yifanyu/.local/lib/python2.7/site-packages/graphlab/data_structures/sframe.py", line 953, in __init__
-    raise ValueError('Unknown input type: ' + format)
-  File "/Users/yifanyu/.local/lib/python2.7/site-packages/graphlab/cython/context.py", line 49, in __exit__
-    raise exc_type(exc_value)
-IOError: /Users/yifanyu/Documents/Topic Learning/ML Classification/amazon_baby.gl not found.: unspecified iostream_category error: unspecified iostream_category error
->>> products=gl.SFrame('/Users/yifanyu/Documents/Topic Learning/ML Classification/amazon_baby.gl/')
-
-Traceback (most recent call last):
-  File "<pyshell#7>", line 1, in <module>
-    products=gl.SFrame('/Users/yifanyu/Documents/Topic Learning/ML Classification/amazon_baby.gl/')
-NameError: name 'gl' is not defined
->>> products=graphlab.SFrame('/Users/yifanyu/Documents/Topic Learning/ML Classification/amazon_baby.gl/')
-
-Traceback (most recent call last):
-  File "<pyshell#8>", line 1, in <module>
-    products=graphlab.SFrame('/Users/yifanyu/Documents/Topic Learning/ML Classification/amazon_baby.gl/')
-  File "/Users/yifanyu/.local/lib/python2.7/site-packages/graphlab/data_structures/sframe.py", line 953, in __init__
-    raise ValueError('Unknown input type: ' + format)
-  File "/Users/yifanyu/.local/lib/python2.7/site-packages/graphlab/cython/context.py", line 49, in __exit__
-    raise exc_type(exc_value)
-IOError: /Users/yifanyu/Documents/Topic Learning/ML Classification/amazon_baby.gl not found.: unspecified iostream_category error: unspecified iostream_category error
->>> products
-
-Traceback (most recent call last):
-  File "<pyshell#9>", line 1, in <module>
-    products
-NameError: name 'products' is not defined
 >>> products=graphlab.SFrame('/Users/yifanyu/Documents/Topic Learning/ML Classification/week1/amazon_baby.gl/')
->>> prodycts
-
-Traceback (most recent call last):
-  File "<pyshell#11>", line 1, in <module>
-    prodycts
-NameError: name 'prodycts' is not defined
 >>> products
 Columns:
 	name	str
