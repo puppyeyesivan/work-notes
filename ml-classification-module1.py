@@ -1,15 +1,18 @@
 Python 2.7.15 |Anaconda, Inc.| (default, May  1 2018, 18:37:05) 
 [GCC 4.2.1 Compatible Clang 4.0.1 (tags/RELEASE_401/final)] on darwin
 Type "copyright", "credits" or "license()" for more information.
+
 >>> #import modules
 >>> from __future__ import division
 >>> import graphlab
 >>> import math
 >>> import string
+
 >>> #step1: import data
 >>> products=graphlab.SFrame('/Users/yifanyu/Documents/Topic Learning/ML Classification/week1/amazon_baby.gl/')
 This non-commercial license of GraphLab Create for academic use is assigned to yifan1991@gwmail.gwu.edu and will expire on December 19, 2019.
 [INFO] graphlab.cython.cy_server: GraphLab Create v2.1 started. Logging: /tmp/graphlab_server_1547071923.log
+
 >>> products
 Columns:
 	name	str
@@ -36,13 +39,14 @@ Data:
 [183531 rows x 3 columns]
 Note: Only the head of the SFrame is printed.
 You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+
 >>> #Step2: data processing
 >>> #2.1 remove punctuation
 >>> def remove_punctuation(text):
 	import string
 	return text.translate(None, string.punctuation)
-
 >>> review_without_punctuation=products['review'].apply(remove_punctuation)
+
 >>> #2.2 create new columns in 'products', where count the number of each word in review
 >>> products['word_count']=graphlab.text_analytics.count_words(review_without_punctuation)
 >>> products
@@ -86,6 +90,7 @@ Data:
 [183531 rows x 4 columns]
 Note: Only the head of the SFrame is printed.
 You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+
 >>> #2.3 extract sentiment
 >>> #rules: classify into sentiment 1 where rating >3 and -1 where rating <3, ignore rating=3
 >>> products_filtered=products[products['rating']!=1]
@@ -97,18 +102,14 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 >>> len(products)
 168348
 >>> products['sentiment']=products['rating'].apply(lambda rating:+1 if rating>3 else -1)
+
 >>> #2.4 split data into training and test sets with percentage of 80% data in training and 20% in test set
 >>> train_data,test_data=products.random_split(.8,seed=1)
->>> len(train_set)
-
-Traceback (most recent call last):
-  File "<pyshell#28>", line 1, in <module>
-    len(train_set)
-NameError: name 'train_set' is not defined
 >>> len(train_data)
 134696
 >>> len(test_data)
 33652
+
 >>> #Step3: Modeling with logistic regression
 >>> sentiment_model=graphlab.logistic_classifier.create(train_data,target='sentiment',features=['word_count'],validation_set=None)
 Logistic regression:
@@ -133,39 +134,9 @@ Starting L-BFGS
 +-----------+----------+-----------+--------------+-------------------+
 TERMINATED: Iteration limit reached.
 This model may not be optimal. To improve it, consider increasing `max_iterations`.
->>> 
-weights
 
-Traceback (most recent call last):
-  File "<pyshell#33>", line 1, in <module>
-    weights
-NameError: name 'weights' is not defined
->>> weights
-
-Traceback (most recent call last):
-  File "<pyshell#34>", line 1, in <module>
-    weights
-NameError: name 'weights' is not defined
->>> weights['value']
-
-Traceback (most recent call last):
-  File "<pyshell#35>", line 1, in <module>
-    weights['value']
-NameError: name 'weights' is not defined
->>> num_positive_weight=len(weights[weights['value']>=0])
-
-Traceback (most recent call last):
-  File "<pyshell#36>", line 1, in <module>
-    num_positive_weight=len(weights[weights['value']>=0])
-NameError: name 'weights' is not defined
 >>> #3.1 check out the coefficient of logistic model
 >>> weight=sentiment_model.coefficients
->>> weights.column_names()
-
-Traceback (most recent call last):
-  File "<pyshell#39>", line 1, in <module>
-    weights.column_names()
-NameError: name 'weights' is not defined
 >>> weight.column_names()
 ['name', 'index', 'class', 'value', 'stderr']
 >>> weight
@@ -196,6 +167,7 @@ Data:
 [122451 rows x 5 columns]
 Note: Only the head of the SFrame is printed.
 You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+
 >>> num_postive_weight=len(weight[weight['value']>0])
 >>> num_postive_weight
 88975
@@ -203,13 +175,8 @@ You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns
 >>> num_negative_weight
 33476
 >>> #notes:positive weights means words have positive effects on sentiment, negative weights means words have negative effects on sentiment
->>> #3.2 predict the logistic regression
->>> sample_test_data=test_dara[10:13]
 
-Traceback (most recent call last):
-  File "<pyshell#48>", line 1, in <module>
-    sample_test_data=test_dara[10:13]
-NameError: name 'test_dara' is not defined
+>>> #3.2 predict the logistic regression
 >>> sample_test_data=test_data[10:13]
 >>> sample_test_data
 Columns:
@@ -238,57 +205,24 @@ Data:
 +-------------------------------+-----------+
 [3 rows x 5 columns]
 
->>> scores=sentiment_model.predicty(sample_test_data,output_type='margin')
-
-Traceback (most recent call last):
-  File "<pyshell#51>", line 1, in <module>
-    scores=sentiment_model.predicty(sample_test_data,output_type='margin')
-  File "/Users/yifanyu/.local/lib/python2.7/site-packages/graphlab/toolkits/_model.py", line 635, in __getattribute__
-    return object.__getattribute__(self, attr)
-AttributeError: 'LogisticClassifier' object has no attribute 'predicty'
->>> scores=sentiment_model.predict(samole_test_data,output_type='margin')
-
-Traceback (most recent call last):
-  File "<pyshell#52>", line 1, in <module>
-    scores=sentiment_model.predict(samole_test_data,output_type='margin')
-NameError: name 'samole_test_data' is not defined
 >>> scores=sentiment_model.predict(sample_test_data,output_type='margin')
-
 >>> scores
 dtype: float
 Rows: 3
 [6.007152881848187, 3.772478977341191, -0.19674213639455307]
->>> sentiment_predict=sentiment_mode.predict[sample_test_data,output_type='type']
-SyntaxError: invalid syntax
->>> sentiment_predict=sentiment_mode.predict(sample_test_data,output_type='type')
 
-Traceback (most recent call last):
-  File "<pyshell#56>", line 1, in <module>
-    sentiment_predict=sentiment_mode.predict(sample_test_data,output_type='type')
-NameError: name 'sentiment_mode' is not defined
->>> sentiment_predict=sentiment_model.predict(sample_test_data,output_type='type')
-[ERROR] graphlab.toolkits._main: Toolkit error: Invalid prediction type name type
-
-Traceback (most recent call last):
-  File "<pyshell#57>", line 1, in <module>
-    sentiment_predict=sentiment_model.predict(sample_test_data,output_type='type')
-  File "/Users/yifanyu/.local/lib/python2.7/site-packages/graphlab/toolkits/classifier/logistic_classifier.py", line 651, in predict
-    missing_value_action=missing_value_action)
-  File "/Users/yifanyu/.local/lib/python2.7/site-packages/graphlab/toolkits/_supervised_learning.py", line 137, in predict
-    'supervised_learning_predict', options)
-  File "/Users/yifanyu/.local/lib/python2.7/site-packages/graphlab/toolkits/_main.py", line 89, in run
-    raise ToolkitError(str(message))
-ToolkitError: Invalid prediction type name type
 >>> sentiment_predict=sentiment_model.predict(sample_test_data,output_type='class')
 >>> sentiment_predict
 dtype: int
 Rows: 3
 [1, 1, -1]
+
 >>> probability_predict=sentiment_model.predict(sample_test_data,output_type='probability')
 >>> probability_predict
 dtype: float
 Rows: 3
 [0.9975449568550027, 0.9775218952433449, 0.4509725081462424]
+
 >>> #Step4: Analysis
 >>> #4.1 Get the most positive review
 >>> #4.2 Get the accuracy of model(create the function of calculating accuracy)
@@ -337,25 +271,8 @@ Data:
 [20 rows x 6 columns]
 Note: Only the head of the SFrame is printed.
 You can use print_rows(num_rows=m, num_columns=n) to print more rows and columns.
+
 >>> #4.2 Accuracy of classifier
->>> def get_classification_accuracy(model,data,true_labels):
-	data['predicted_classification']=model.predict(data,output_type='class')
-	count=0
-	for i in range(0,len(data)):
-		if data[i]['predicted_classification']==data[i][true_lables]:
-			count=count+1
-		else: count=count
-	accuracy=count/len(data)
-	return accuracy
-
->>> get_classification_accuracy(sentiment_model,test_data,'sentiment')
-
-Traceback (most recent call last):
-  File "<pyshell#79>", line 1, in <module>
-    get_classification_accuracy(sentiment_model,test_data,'sentiment')
-  File "<pyshell#78>", line 5, in get_classification_accuracy
-    if data[i]['predicted_classification']==data[i][true_lables]:
-NameError: global name 'true_lables' is not defined
 >>> def get_classification_accuracy(model,data,true_labels):
 	data['predicted_classification']=model.predict(data,output_type='class')
 	count=0
@@ -374,8 +291,7 @@ NameError: global name 'true_lables' is not defined
       'well', 'able', 'car', 'broke', 'less', 'even', 'waste', 'disappointed', 
       'work', 'product', 'money', 'would', 'return']
 >>> train_data['word_count_subset']=train_data['word_count'].dict_trim_by_keys(significant_words,exclude=False)
->>> print train_data[0]['word_count_subset']
-{}
+
 >>> train_data['word_count_subset']
 dtype: dict
 Rows: 134696
